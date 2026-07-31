@@ -26,7 +26,7 @@ clean:
 	$(RM) $(OBJS) $(CHECKER_OBJS)
 
 fclean: clean
-	$(RM) $(NAME) $(CHECKER)
+	$(RM) $(NAME)
 
 re: fclean all
 
