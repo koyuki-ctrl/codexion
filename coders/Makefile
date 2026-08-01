@@ -4,7 +4,7 @@ NAME = codexion
 CFLAGS = -Wall -Wextra -Werror
 RM = rm -f
 
-SRCS = main.c parser.c
+SRCS = main.c parser.c utils.c coder.c
 
 OBJS = $(SRCS:.c=.o)
 CHECKER_OBJS = $(CHECKER_SRCS:.c=.o)

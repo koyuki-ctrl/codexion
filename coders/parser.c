@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/31 14:32:52 by ainradan          #+#    #+#             */
-/*   Updated: 2026/07/31 17:26:11 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/01 16:43:12 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,32 +36,54 @@ static char	*str_to_lower(char *str)
 
 static int	scheduler_converter(char *str)
 {
-	if (strcmp(str_to_lower(str), "fifo") == 0)
-		return (1);
-	else if (strcmp(str_to_lower(str), "edf") == 0)
-		return (2);
-	else
+	char	*lower;
+	int		result;
+
+	lower = str_to_lower(str);
+	if (!lower)
 		return (0);
+	if (strcmp(lower, "fifo") == 0)
+		result = 1;
+	else if (strcmp(lower, "edf") == 0)
+		result = 2;
+	else
+		result = 0;
+	free(lower);
+	return (result);
 }
 
-int	arguments_validator(char **argv)
+static int	fill_field(const char	*str, int	*dest)
 {
-	t_arguments	arguments;
+	long	tmp;
 
-	arguments.coders = atoi(argv[1]);
-	arguments.burnout = atoi(argv[2]);
-	arguments.compile = atoi(argv[3]);
-	arguments.debug = atoi(argv[4]);
-	arguments.refactor = atoi(argv[5]);
-	arguments.compiles = atoi(argv[6]);
-	arguments.dongle = atoi(argv[7]);
-	arguments.scheduler = scheduler_converter(argv[8]);
-	if (arguments.coders <= 1 || arguments.dongle < 1
-		|| (arguments.compile < 1 || arguments.debug < 1)
-		|| (arguments.burnout < 1 || arguments.refactor < 1)
-		|| (arguments.compiles < 1 || arguments.scheduler == 0)
+	if (!ft_strict_atoi(str, &tmp))
+		return (0);
+	*dest = (int)tmp;
+	return (1);
+}
+
+int	arguments_validator(char	**argv, t_arguments	*arguments)
+{
+	if (!fill_field(argv[1], &arguments->coders))
+		return (0);
+	if (!fill_field(argv[2], &arguments->burnout))
+		return (0);
+	if (!fill_field(argv[3], &arguments->compile))
+		return (0);
+	if (!fill_field(argv[4], &arguments->debug))
+		return (0);
+	if (!fill_field(argv[5], &arguments->refactor))
+		return (0);
+	if (!fill_field(argv[6], &arguments->compiles))
+		return (0);
+	if (!fill_field(argv[7], &arguments->dongle))
+		return (0);
+	arguments->scheduler = scheduler_converter(argv[8]);
+	if (arguments->coders < 1 || arguments->dongle < 1
+		|| (arguments->compile < 1 || arguments->debug < 1)
+		|| (arguments->burnout < 1 || arguments->refactor < 1)
+		|| (arguments->compiles < 1 || arguments->scheduler == 0)
 	)
 		return (0);
-	else
-		return (1);
+	return (1);
 }
