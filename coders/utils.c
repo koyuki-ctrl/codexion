@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 10:25:44 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/01 17:27:56 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/03 15:48:39 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,23 @@ void	log_state(t_arguments *args, int coder_id, const char *msg)
 	pthread_mutex_lock(&args->print_lock);
 	printf("%ld %d %s\n", ts, coder_id, msg);
 	pthread_mutex_unlock(&args->print_lock);
+}
+
+long	tv_diff_ms(struct timeval *later, struct timeval *earlier)
+{
+	long	sec_diff;
+	long	usec_diff;
+
+	sec_diff = later->tv_sec - earlier->tv_sec;
+	usec_diff = later->tv_usec - earlier->tv_usec;
+	return (sec_diff * 1000 + usec_diff / 1000);
+}
+
+void	tv_add_ms(struct timeval *base, long ms, struct timespec *out)
+{
+	long	total_usec;
+
+	total_usec = (long)base->tv_usec + (ms % 1000) * 1000;
+	out->tv_sec = base->tv_sec + ms / 1000 + total_usec / 1000000;
+	out->tv_nsec = (total_usec % 1000000) * 1000;
 }
