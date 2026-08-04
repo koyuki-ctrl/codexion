@@ -31,6 +31,7 @@ static char	*str_to_lower(char *str)
 			new_str[i] = str[i];
 		i++;
 	}
+	new_str[i] = '\0';
 	return (new_str);
 }
 
@@ -52,7 +53,7 @@ static int	scheduler_converter(char *str)
 	return (result);
 }
 
-static int	fill_field(const char	*str, int	*dest)
+static int	fill_field(const char *str, int *dest)
 {
 	long	tmp;
 
@@ -62,7 +63,7 @@ static int	fill_field(const char	*str, int	*dest)
 	return (1);
 }
 
-int	arguments_validator(char	**argv, t_arguments	*arguments)
+int	arguments_validator(char **argv, t_arguments *arguments)
 {
 	if (!fill_field(argv[1], &arguments->coders))
 		return (0);

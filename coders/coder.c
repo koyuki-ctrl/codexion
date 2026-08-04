@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 16:48:12 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/03 16:28:11 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/04 11:52:50 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,18 @@ static void	mark_compile_start(t_coder *c)
 	pthread_mutex_unlock(&c->args->state_lock);
 }
 
+static int	take_dongle(t_coder *coder, t_dongle *first, t_dongle *second)
+{
+	log_state(coder->args, coder->id, "has taken a dongle");
+	if (!dongle_acquire(second, coder->args, coder))
+	{
+		dongle_release(first);
+		return (0);
+	}
+	log_state(coder->args, coder->id, "has taken a dongle");
+	return (1);
+}
+
 void	loop_sim(t_coder *coder, t_dongle *first, t_dongle *second)
 {
 	int	i;
@@ -29,13 +41,8 @@ void	loop_sim(t_coder *coder, t_dongle *first, t_dongle *second)
 	{
 		if (!dongle_acquire(first, coder->args, coder))
 			break ;
-		log_state(coder->args, coder->id, "has taken a dongle");
-		if (!dongle_acquire(second, coder->args, coder))
-		{
-			dongle_release(first);
+		if (!take_dongle(coder, first, second))
 			break ;
-		}
-		log_state(coder->args, coder->id, "has taken a dongle");
 		mark_compile_start(coder);
 		log_state(coder->args, coder->id, "is compiling");
 		usleep(coder->args->compile * 1000);

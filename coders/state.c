@@ -12,7 +12,7 @@
 
 #include "coders.h"
 
-static int	is_all_done(t_arguments	*args, t_coder	*coders)
+static int	is_all_done(t_arguments *args, t_coder *coders)
 {
 	int	i;
 
@@ -26,7 +26,7 @@ static int	is_all_done(t_arguments	*args, t_coder	*coders)
 	return (1);
 }
 
-int		is_stopped(t_arguments	*args)
+int	is_stopped(t_arguments *args)
 {
 	int	value;
 
@@ -35,9 +35,10 @@ int		is_stopped(t_arguments	*args)
 	pthread_mutex_unlock(&args->stop_lock);
 	return (value);
 }
-void	request_stop(t_arguments	*args)
+
+void	request_stop(t_arguments *args)
 {
-	int i;
+	int	i;
 
 	pthread_mutex_lock(&args->stop_lock);
 	args->stop = 1;
@@ -54,7 +55,8 @@ void	request_stop(t_arguments	*args)
 		i++;
 	}
 }
-void	register_compile(t_arguments	*args, t_coder	*coder, t_coder	*coders)
+
+void	register_compile(t_arguments *args, t_coder *coder, t_coder *coders)
 {
 	int	finished;
 
@@ -62,6 +64,6 @@ void	register_compile(t_arguments	*args, t_coder	*coder, t_coder	*coders)
 	coder->compiles_done++;
 	finished = is_all_done(args, coders);
 	pthread_mutex_unlock(&args->count_lock);
-	if(finished)
+	if (finished)
 		request_stop(args);
 }

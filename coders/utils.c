@@ -12,7 +12,7 @@
 
 #include "coders.h"
 
-int	ft_strict_atoi(const char	*s, long	*out)
+int	ft_strict_atoi(const char *s, long *out)
 {
 	long	result;
 	int		i;
@@ -29,7 +29,7 @@ int	ft_strict_atoi(const char	*s, long	*out)
 		if (result > 2147483647L)
 		{
 			fprintf(stdout, "Overflow\n");
-			return(0);
+			return (0);
 		}
 		i++;
 	}

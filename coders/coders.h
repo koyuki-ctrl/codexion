@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/31 13:47:49 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/03 16:10:17 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/04 11:51:18 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-#include <pthread.h>
-#include <unistd.h>
+# include <pthread.h>
+# include <unistd.h>
 # include <sys/time.h>
-#include <errno.h>
+# include <errno.h>
 
-typedef struct	s_request
+typedef struct s_request
 {
 	int					coder_id;
 	long				priority_key;
@@ -28,7 +28,7 @@ typedef struct	s_request
 	struct s_request	*next;
 }	t_request;
 
-typedef struct	s_dongle
+typedef struct s_dongle
 {
 	int				id;
 	int				available;
@@ -59,6 +59,8 @@ typedef struct s_arguments
 	pthread_mutex_t	state_lock;
 	pthread_cond_t	state_cond;
 	pthread_t		monitor;
+	pthread_mutex_t	ticket_lock;
+	long			next_ticket;
 }	t_arguments;
 
 typedef struct s_coder
@@ -72,23 +74,27 @@ typedef struct s_coder
 	struct timeval	last_compile_start;
 }	t_coder;
 
-int		arguments_validator(char	**argv, t_arguments	*arguments);
+int		arguments_validator(char **argv, t_arguments *arguments);
 void	log_state(t_arguments *args, int coder_id, const char *msg);
-int		ft_strict_atoi(const char	*s, long	*out);
+int		ft_strict_atoi(const char *s, long *out);
 long	ms_since(struct timeval *ref);
 void	*coder_routine(void *args);
-void	dongle_init(t_dongle	*dongles, int	id);
+void	dongle_init(t_dongle *dongles, int id);
 int		dongle_acquire(t_dongle *d, t_arguments *args, t_coder *coder);
-void	dongle_destroy(t_dongle	*dongles);
+void	dongle_destroy(t_dongle *dongles);
 void	dongle_release(t_dongle *dongles);
-int		is_stopped(t_arguments	*args);
-void	request_stop(t_arguments	*args);
-void	register_compile(t_arguments	*args, t_coder	*coder, t_coder	*coders);
+int		is_stopped(t_arguments *args);
+void	request_stop(t_arguments *args);
+void	register_compile(t_arguments *args, t_coder *coder, t_coder *coders);
 void	request_enqueue(t_dongle *dongle, t_request *req);
 int		request_is_front(t_dongle *dongle, int coder_id);
 void	request_remove_front(t_dongle *dongle);
+void	request_remove_by_id(t_dongle *dongle, int coder_id);
 long	tv_diff_ms(struct timeval *later, struct timeval *earlier);
 void	tv_add_ms(struct timeval *base, long ms, struct timespec *out);
 void	*monitor_routine(void *arg);
+void	pthread_init(t_arguments *arguments);
+void	pthread_destroy(t_arguments *arguments, t_coder *coders);
+void	dongle_acquire_loop(t_dongle *d, t_arguments *args, t_coder *coder);
 
 #endif

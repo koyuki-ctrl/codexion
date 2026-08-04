@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/03 15:50:43 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/03 15:51:25 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/04 11:57:38 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,12 @@ static int	find_earliest(t_arguments *args, struct timespec *out, int *idx)
 	return (found);
 }
 
-void	*monitor_routine(void *arg)
+static void	routing(t_arguments *args)
 {
-	t_arguments		*args;
 	struct timespec	deadline;
 	int				idx;
 	int				rc;
 
-	args = (t_arguments *)arg;
 	pthread_mutex_lock(&args->state_lock);
 	while (!is_stopped(args))
 	{
@@ -63,8 +61,10 @@ void	*monitor_routine(void *arg)
 				&deadline);
 		if (is_stopped(args))
 			break ;
-		if (rc == ETIMEDOUT && ms_since(&args->coder_list[idx].last_compile_start)
-				>= args->burnout)
+		if (
+			rc == ETIMEDOUT
+			&& ms_since(&args->coder_list[idx].last_compile_start)
+			>= args->burnout)
 		{
 			pthread_mutex_unlock(&args->state_lock);
 			log_state(args, args->coder_list[idx].id, "burned out");
@@ -73,6 +73,14 @@ void	*monitor_routine(void *arg)
 			break ;
 		}
 	}
+}
+
+void	*monitor_routine(void *arg)
+{
+	t_arguments		*args;
+
+	args = (t_arguments *)arg;
+	routing(args);
 	pthread_mutex_unlock(&args->state_lock);
 	return (NULL);
 }
