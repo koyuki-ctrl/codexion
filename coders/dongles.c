@@ -6,36 +6,37 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/03 10:00:10 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/04 11:56:01 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/11 21:24:00 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coders.h"
 
-void	dongle_init(t_dongle *dongle, int id)
+void	dongle_init(t_dongle *dongle, int id, int max_coders)
 {
 	dongle->id = id;
 	dongle->available = 1;
 	dongle->free_since.tv_sec = 0;
 	dongle->free_since.tv_usec = 0;
 	dongle->next_seq = 0;
-	dongle->queue = NULL;
+	dongle->heap = malloc(sizeof(t_request *) * max_coders);
+	dongle->heap_size = 0;
+	dongle->heap_cap = max_coders;
 	pthread_mutex_init(&dongle->lock, NULL);
 	pthread_cond_init(&dongle->cond, NULL);
 }
 
 void	dongle_destroy(t_dongle *dongles)
 {
-	t_request	*cur;
-	t_request	*next;
+	int	i;
 
-	cur = dongles->queue;
-	while (cur)
+	i = 0;
+	while (i < dongles->heap_size)
 	{
-		next = cur->next;
-		free(cur);
-		cur = next;
+		free(dongles->heap[i]);
+		i++;
 	}
+	free(dongles->heap);
 	pthread_mutex_destroy(&dongles->lock);
 	pthread_cond_destroy(&dongles->cond);
 }
@@ -61,7 +62,7 @@ static long	compute_priority_key(t_arguments *args, t_coder *coder)
 
 int	dongle_acquire(t_dongle *d, t_arguments *args, t_coder *coder)
 {
-	t_request		*req;
+	t_request	*req;
 
 	req = malloc(sizeof(t_request));
 	if (!req)
@@ -71,7 +72,7 @@ int	dongle_acquire(t_dongle *d, t_arguments *args, t_coder *coder)
 	req->priority_key = compute_priority_key(args, coder);
 	req->seq = d->next_seq++;
 	req->next = NULL;
-	request_enqueue(d, req);
+	heap_insert(d, req);
 	dongle_acquire_loop(d, args, coder);
 	if (is_stopped(args))
 	{
@@ -80,8 +81,7 @@ int	dongle_acquire(t_dongle *d, t_arguments *args, t_coder *coder)
 		return (0);
 	}
 	d->available = 0;
-	d->queue = d->queue->next;
-	free(req);
+	free(heap_extract_min(d));
 	pthread_mutex_unlock(&d->lock);
 	return (1);
 }

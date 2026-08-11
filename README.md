@@ -61,7 +61,7 @@ The project compiles with `-Wall -Wextra -Werror -pthread`.
 # Blocking Cases Handled
 
 ## Deadlock Prevention
-Deadlock is prevented by enforcing a **strict total ordering** on dongle acquisition: each coder always picks the lower-ID dongle first, then the higher-ID one. This breaks the circular-wait condition (one of Coffman's four conditions), ensuring no cyclic dependency can form even when all coders attempt to acquire resources simultaneously.
+Deadlock is prevented by enforcing a **strict total ordering** on dongle acquisition: each coder always picks the lower-ID dongle first, then the higher-ID one. This breaks the circular-wait condition (one of Coffman's four conditions), ensuring no cyclic dependency can form even when all coders attempt to acquire resources simultaneously. A special case is handled when there is only one coder: the same dongle is used for both hands without attempting to lock it twice.
 
 ## Starvation Prevention
 Under FIFO scheduling, a **global ticket counter** guarantees strict arrival ordering across all requests, preventing any coder from being indefinitely bypassed. Under EDF, the priority queue always serves the coder with the earliest burnout deadline first. Liveness is guaranteed because every compile updates the requester's deadline, and the monitor ensures no coder is left waiting past their threshold.
@@ -87,7 +87,7 @@ All state-change logs pass through a single `pthread_mutex_t` (`print_lock`). Th
 - **`count_lock`**: Guards the per-coder compile counters during `register_compile()`.
 - **`state_lock`**: Synchronizes access to `last_compile_start` timestamps and the monitor's condition variable.
 - **`ticket_lock`**: Ensures atomic increment of the global FIFO ticket counter.
-- **Per-dongle `lock`**: Each dongle has its own mutex protecting its availability state, cooldown timestamp, and request queue.
+- **Per-dongle `lock`**: Each dongle has its own mutex protecting its availability state, cooldown timestamp, and request heap.
 
 ### `pthread_cond_t`
 - **`state_cond`**: Used by the monitor thread to wait for compile-start events or until the next burnout deadline expires.
@@ -97,11 +97,11 @@ All state-change logs pass through a single `pthread_mutex_t` (`print_lock`). Th
   - The simulation stops (emergency wake-up)
 
 ## Custom Event Implementation
-The dongle request queue is a **priority queue (sorted linked list)**. For FIFO, priority is a monotonic global ticket; for EDF, priority is the coder's burnout deadline (`last_compile_start + time_to_burnout`). The queue is protected by the per-dongle mutex. A coder can only take a dongle if they are at the front of its queue, the dongle is available, and its cooldown has elapsed.
+The dongle request queue is a **min-heap binary priority queue**. For FIFO, priority is a monotonic global ticket; for EDF, priority is the coder's burnout deadline (`last_compile_start + time_to_burnout`). The heap is protected by the per-dongle mutex. A coder can only take a dongle if they are at the front of its heap, the dongle is available, and its cooldown has elapsed.
 
 ## Race Condition Prevention
-- **Double-dongle acquisition**: A coder enqueues a heap-allocated `t_request` before waiting. If the simulation stops before acquisition, the request is explicitly removed from the queue and freed, preventing phantom queue entries.
-- **Spurious wakeups**: The `while` loop around `pthread_cond_wait`/`pthread_cond_timedwait` re-checks all conditions (stopped, available, cooldown elapsed, front-of-queue) before proceeding.
+- **Double-dongle acquisition**: A coder inserts a heap-allocated `t_request` before waiting. If the simulation stops before acquisition, the request is explicitly removed from the heap and freed, preventing phantom queue entries.
+- **Spurious wakeups**: The `while` loop around `pthread_cond_wait`/`pthread_cond_timedwait` re-checks all conditions (stopped, available, cooldown elapsed, front-of-heap) before proceeding.
 - **Monitor precision**: The monitor holds `state_lock` while computing deadlines and waiting, ensuring it never reads a stale timestamp while a coder is mid-update.
 
 ---

@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 11:49:30 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/04 12:21:28 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/11 21:24:00 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ static int	init_allocation(t_arguments *arguments, t_coder **coders)
 	i = 0;
 	while (i < arguments->coders)
 	{
-		dongle_init(&arguments->dongles[i], i);
+		dongle_init(&arguments->dongles[i], i, arguments->coders);
 		i++;
 	}
 	*coders = malloc(sizeof(t_coder) * arguments->coders);
@@ -121,9 +121,9 @@ int	main(int argc, char **argv)
 	routing_sim(coders, &arguments);
 	pthread_join(arguments.monitor, NULL);
 	i = 0;
-	while (i < arguments.coders)
+	while (i < arguments->coders)
 	{
-		dongle_destroy(&arguments.dongles[i]);
+		dongle_destroy(&arguments->dongles[i]);
 		i++;
 	}
 	pthread_destroy(&arguments, coders);

@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/01 16:48:12 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/04 11:52:50 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/11 21:24:00 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,22 @@ void	loop_sim(t_coder *coder, t_dongle *first, t_dongle *second)
 	{
 		if (!dongle_acquire(first, coder->args, coder))
 			break ;
-		if (!take_dongle(coder, first, second))
-			break ;
+		if (first != second)
+		{
+			if (!take_dongle(coder, first, second))
+				break ;
+		}
+		else
+		{
+			log_state(coder->args, coder->id, "has taken a dongle");
+			log_state(coder->args, coder->id, "has taken a dongle");
+		}
 		mark_compile_start(coder);
 		log_state(coder->args, coder->id, "is compiling");
 		usleep(coder->args->compile * 1000);
 		dongle_release(coder->left);
-		dongle_release(coder->right);
+		if (coder->left != coder->right)
+			dongle_release(coder->right);
 		register_compile(coder->args, coder, coder->args->coder_list);
 		if (is_stopped(coder->args))
 			break ;
