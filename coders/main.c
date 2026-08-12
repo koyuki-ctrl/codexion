@@ -1,4 +1,14 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/12 09:20:38 by ainradan          #+#    #+#             */
+/*   Updated: 2026/08/12 09:20:42 by ainradan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "coders.h"
 
@@ -111,9 +121,9 @@ int	main(int argc, char **argv)
 	routing_sim(coders, &arguments);
 	pthread_join(arguments.monitor, NULL);
 	i = 0;
-	while (i < arguments->coders)
+	while (i < arguments.coders)
 	{
-		dongle_destroy(&arguments->dongles[i]);
+		dongle_destroy(&arguments.dongles[i]);
 		i++;
 	}
 	pthread_destroy(&arguments, coders);

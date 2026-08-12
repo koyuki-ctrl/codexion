@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dongles_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/12 09:21:13 by ainradan          #+#    #+#             */
+/*   Updated: 2026/08/12 09:21:14 by ainradan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "coders.h"
 
 void	dongle_acquire_loop(t_dongle *d, t_arguments *args, t_coder *coder)

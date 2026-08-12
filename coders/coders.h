@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   coders.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/12 09:21:05 by ainradan          #+#    #+#             */
+/*   Updated: 2026/08/12 09:59:20 by ainradan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CODERS_H
 # define CODERS_H
 # include <stdio.h>
@@ -14,20 +26,20 @@ typedef struct s_request
 	long				priority_key;
 	long				seq;
 	struct s_request	*next;
-} t_request;
+}	t_request;
 
 typedef struct s_dongle
 {
 	int				id;
 	int				available;
-	struct timeval		free_since;
-	long				next_seq;
-	t_request			**heap;
-	int					heap_size;
-	int					heap_cap;
-	pthread_mutex_t		lock;
-	pthread_cond_t		cond;
-} t_dongle;
+	struct timeval	free_since;
+	long			next_seq;
+	t_request		**heap;
+	int				heap_size;
+	int				heap_cap;
+	pthread_mutex_t	lock;
+	pthread_cond_t	cond;
+}	t_dongle;
 
 typedef struct s_arguments
 {
@@ -51,7 +63,7 @@ typedef struct s_arguments
 	pthread_t			monitor;
 	pthread_mutex_t		ticket_lock;
 	long				next_ticket;
-} t_arguments;
+}	t_arguments;
 
 typedef struct s_coder
 {
@@ -62,7 +74,7 @@ typedef struct s_coder
 	t_arguments			*args;
 	int					compiles_done;
 	struct timeval		last_compile_start;
-} t_coder;
+}	t_coder;
 
 int			arguments_validator(char **argv, t_arguments *arguments);
 void		log_state(t_arguments *args, int coder_id, const char *msg);
@@ -75,7 +87,8 @@ void		dongle_destroy(t_dongle *dongles);
 void		dongle_release(t_dongle *dongles);
 int			is_stopped(t_arguments *args);
 void		request_stop(t_arguments *args);
-void		register_compile(t_arguments *args, t_coder *coder, t_coder *coders);
+void		register_compile(
+				t_arguments *args, t_coder *coder, t_coder *coders);
 void		heap_insert(t_dongle *dongle, t_request *req);
 t_request	*heap_extract_min(t_dongle *dongle);
 t_request	*heap_peek(t_dongle *dongle);
@@ -87,5 +100,15 @@ void		*monitor_routine(void *arg);
 void		pthread_init(t_arguments *arguments);
 void		pthread_destroy(t_arguments *arguments, t_coder *coders);
 void		dongle_acquire_loop(t_dongle *d, t_arguments *args, t_coder *coder);
+void		heap_swap(t_request **a, t_request **b);
+int			request_lt(t_request *a, t_request *b);
+void		heap_sift_up(t_dongle *dongle, int idx);
+int			acquire_dongles(t_coder *coder, t_dongle *first, t_dongle *second);
+void		release_dongles(t_coder *coder);
+int			compile_phase(t_coder *coder);
+int			debug_phase(t_coder *coder);
+void		refactor_phase(t_coder *coder);
+void		mark_compile_start(t_coder *c);
+int			take_dongle(t_coder *coder, t_dongle *first, t_dongle *second);
 
 #endif

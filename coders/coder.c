@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   coder.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/08/12 09:20:55 by ainradan          #+#    #+#             */
+/*   Updated: 2026/08/12 09:59:06 by ainradan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "coders.h"
 
-static void	mark_compile_start(t_coder *c)
+void	mark_compile_start(t_coder *c)
 {
 	pthread_mutex_lock(&c->args->state_lock);
 	gettimeofday(&c->last_compile_start, NULL);
@@ -8,7 +20,7 @@ static void	mark_compile_start(t_coder *c)
 	pthread_mutex_unlock(&c->args->state_lock);
 }
 
-static int	take_dongle(t_coder *coder, t_dongle *first, t_dongle *second)
+int	take_dongle(t_coder *coder, t_dongle *first, t_dongle *second)
 {
 	log_state(coder->args, coder->id, "has taken a dongle");
 	if (!dongle_acquire(second, coder->args, coder))
@@ -27,33 +39,13 @@ void	loop_sim(t_coder *coder, t_dongle *first, t_dongle *second)
 	i = 0;
 	while (i < coder->args->compiles && !is_stopped(coder->args))
 	{
-		if (!dongle_acquire(first, coder->args, coder))
+		if (!acquire_dongles(coder, first, second))
 			break ;
-		if (first != second)
-		{
-			if (!take_dongle(coder, first, second))
-				break ;
-		}
-		else
-		{
-			log_state(coder->args, coder->id, "has taken a dongle");
-			log_state(coder->args, coder->id, "has taken a dongle");
-		}
-		mark_compile_start(coder);
-		log_state(coder->args, coder->id, "is compiling");
-		usleep(coder->args->compile * 1000);
-		dongle_release(coder->left);
-		if (coder->left != coder->right)
-			dongle_release(coder->right);
-		register_compile(coder->args, coder, coder->args->coder_list);
-		if (is_stopped(coder->args))
+		if (!compile_phase(coder))
 			break ;
-		log_state(coder->args, coder->id, "is debugging");
-		usleep(coder->args->debug * 1000);
-		if (is_stopped(coder->args))
+		if (!debug_phase(coder))
 			break ;
-		log_state(coder->args, coder->id, "is refactoring");
-		usleep(coder->args->refactor * 1000);
+		refactor_phase(coder);
 		i++;
 	}
 }
