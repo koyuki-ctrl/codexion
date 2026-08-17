@@ -44,13 +44,11 @@ void	dongle_destroy(t_dongle *dongles)
 static long	compute_priority_key(t_arguments *args, t_coder *coder)
 {
 	long	key;
-	long	key_sum;
 
 	if (args->scheduler == 2)
 	{
 		pthread_mutex_lock(&args->state_lock);
 		key = tv_diff_ms(&coder->last_compile_start, &args->start_time);
-		key_sum = key + args->burnout;
 		pthread_mutex_unlock(&args->state_lock);
 		return (key);
 	}

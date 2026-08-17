@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:46:47 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/12 10:21:28 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/15 15:30:09 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	acquire_dongles(t_coder *coder, t_dongle *first, t_dongle *second)
 	return (1);
 }
 
-void	release_dongles(t_coder *coder)
+void	release_dongles(t_coder *coder) 
 {
 	dongle_release(coder->left);
 	if (coder->left != coder->right)
