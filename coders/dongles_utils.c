@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:21:13 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/12 09:21:14 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/17 13:29:33 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,25 @@ void	dongle_acquire_loop(t_dongle *d, t_arguments *args, t_coder *coder)
 		else
 			pthread_cond_wait(&d->cond, &d->lock);
 	}
+}
+
+int	dongles_manager(t_arguments *arguments, t_coder **coders)
+{
+	if (!arguments->dongles)
+	{
+		fprintf(stdout, "Allocation error\n");
+		return (0);
+	}
+	if (!init_allocation(arguments, coders))
+	{
+		free(arguments->dongles);
+		return (0);
+	}
+	arguments->coder_list = *coders;
+	if (
+		pthread_create(
+			&arguments->monitor, NULL,
+			monitor_routine, arguments) != 0)
+		return (0);
+	return (1);
 }

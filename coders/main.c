@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:20:38 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/15 14:12:30 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/17 13:29:23 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,27 +86,6 @@ static int	init_allocation(t_arguments *arguments, t_coder **coders)
 		return (0);
 	}
 	coders_init(*coders, arguments);
-	return (1);
-}
-
-static int	dongles_manager(t_arguments *arguments, t_coder **coders)
-{
-	if (!arguments->dongles)
-	{
-		fprintf(stdout, "Allocation error\n");
-		return (0);
-	}
-	if (!init_allocation(arguments, coders))
-	{
-		free(arguments->dongles);
-		return (0);
-	}
-	arguments->coder_list = *coders;
-	if (
-		pthread_create(
-			&arguments->monitor, NULL,
-			monitor_routine, arguments) != 0)
-		return (0);
 	return (1);
 }
 

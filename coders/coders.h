@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:21:05 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/12 09:59:20 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/17 13:30:56 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,9 @@ typedef struct s_coder
 	struct timeval		last_compile_start;
 }	t_coder;
 
+t_request	*heap_extract_min(t_dongle *dongle);
+t_request	*heap_peek(t_dongle *dongle);
+
 int			arguments_validator(char **argv, t_arguments *arguments);
 void		log_state(t_arguments *args, int coder_id, const char *msg);
 int			ft_strict_atoi(const char *s, long *out);
@@ -90,8 +93,6 @@ void		request_stop(t_arguments *args);
 void		register_compile(
 				t_arguments *args, t_coder *coder, t_coder *coders);
 void		heap_insert(t_dongle *dongle, t_request *req);
-t_request	*heap_extract_min(t_dongle *dongle);
-t_request	*heap_peek(t_dongle *dongle);
 int			request_is_front(t_dongle *dongle, int coder_id);
 void		request_remove_by_id(t_dongle *dongle, int coder_id);
 long		tv_diff_ms(struct timeval *later, struct timeval *earlier);
@@ -110,5 +111,6 @@ int			debug_phase(t_coder *coder);
 void		refactor_phase(t_coder *coder);
 void		mark_compile_start(t_coder *c);
 int			take_dongle(t_coder *coder, t_dongle *first, t_dongle *second);
+int			dongles_manager(t_arguments *arguments, t_coder **coders);
 
 #endif

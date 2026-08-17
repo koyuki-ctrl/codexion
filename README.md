@@ -112,7 +112,6 @@ The dongle request queue is a **min-heap binary priority queue**. For FIFO, prio
 - **The Linux Programming Interface** — Michael Kerrisk (Chapters 29–31: POSIX Threads, Mutexes, Condition Variables)
 - **POSIX Threads Programming** — randu Tutorial: https://randu.org/tutorials/threads/
 - **pthread_cond_timedwait(3)** — Linux man pages
-- **Dining Philosophers Problem** — Classic concurrency analogy; our solution uses resource ordering (low-ID first) to prevent deadlock
 
 ## AI Usage
 AI tools were used during this project for:
