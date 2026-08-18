@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:20:38 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/17 13:29:23 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/18 14:00:02 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void	routing_sim(t_coder *coders, t_arguments *arguments)
 	}
 }
 
-static int	init_allocation(t_arguments *arguments, t_coder **coders)
+int	init_allocation(t_arguments *arguments, t_coder **coders)
 {
 	int	i;
 
@@ -102,7 +102,7 @@ int	main(int argc, char **argv)
 	arguments.next_ticket = 0;
 	arguments.stop = 0;
 	arguments.dongles = malloc(sizeof(t_dongle) * arguments.coders);
-	if (!dongles_manager(&arguments, &coders))
+	if (!monitoring_manager(&arguments, &coders))
 		return (0);
 	routing_sim(coders, &arguments);
 	pthread_join(arguments.monitor, NULL);

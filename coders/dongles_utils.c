@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:21:13 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/17 13:29:33 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/18 13:58:48 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	dongle_acquire_loop(t_dongle *d, t_arguments *args, t_coder *coder)
 	}
 }
 
-int	dongles_manager(t_arguments *arguments, t_coder **coders)
+int	monitoring_manager(t_arguments *arguments, t_coder **coders)
 {
 	if (!arguments->dongles)
 	{
