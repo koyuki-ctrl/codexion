@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:20:55 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/12 09:59:06 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/20 13:19:14 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,18 @@ int	take_dongle(t_coder *coder, t_dongle *first, t_dongle *second)
 	return (1);
 }
 
+static int	is_last_compilation(int i, t_coder	*coder)
+{
+	if (i == coder->args->compiles - 1)
+		return (1);
+	else
+		return (0);
+}
+
 void	loop_sim(t_coder *coder, t_dongle *first, t_dongle *second)
 {
 	int	i;
+	int last_compile;
 
 	i = 0;
 	while (i < coder->args->compiles && !is_stopped(coder->args))
@@ -46,6 +55,8 @@ void	loop_sim(t_coder *coder, t_dongle *first, t_dongle *second)
 		if (!debug_phase(coder))
 			break ;
 		refactor_phase(coder);
+		last_compile = is_last_compilation(i, coder);
+		register_compile(coder->args, coder, coder->args->coder_list);
 		i++;
 	}
 }

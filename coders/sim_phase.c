@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:46:47 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/17 13:27:47 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/20 13:19:18 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	compile_phase(t_coder *coder)
 	log_state(coder->args, coder->id, "is compiling");
 	usleep(coder->args->compile * 1000);
 	release_dongles(coder);
-	register_compile(coder->args, coder, coder->args->coder_list);
 	return (!is_stopped(coder->args));
 }
 
