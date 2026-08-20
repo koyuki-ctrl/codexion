@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:21:05 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/18 13:59:15 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/19 09:49:36 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ typedef struct s_request
 	int					coder_id;
 	long				priority_key;
 	long				seq;
-	struct s_request	*next;
 }	t_request;
 
 typedef struct s_dongle

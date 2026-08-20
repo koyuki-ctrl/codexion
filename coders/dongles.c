@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:21:19 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/12 09:21:20 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/19 09:49:51 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ int	dongle_acquire(t_dongle *d, t_arguments *args, t_coder *coder)
 	req->coder_id = coder->id;
 	req->priority_key = compute_priority_key(args, coder);
 	req->seq = d->next_seq++;
-	req->next = NULL;
 	heap_insert(d, req);
 	dongle_acquire_loop(d, args, coder);
 	if (is_stopped(args))
