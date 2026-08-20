@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:21:05 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/19 09:49:36 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/20 16:35:54 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,13 +103,14 @@ void		dongle_acquire_loop(t_dongle *d, t_arguments *args, t_coder *coder);
 void		heap_swap(t_request **a, t_request **b);
 int			request_lt(t_request *a, t_request *b);
 void		heap_sift_up(t_dongle *dongle, int idx);
-int			acquire_dongles(t_coder *coder, t_dongle *first, t_dongle *second);
+int			lock_compilation_resources(
+				t_coder *coder, t_dongle *first, t_dongle *second);
 void		release_dongles(t_coder *coder);
 int			compile_phase(t_coder *coder);
 int			debug_phase(t_coder *coder);
 void		refactor_phase(t_coder *coder);
 void		mark_compile_start(t_coder *c);
-int			take_dongle(t_coder *coder, t_dongle *first, t_dongle *second);
+int			finalize_second_dongle(t_coder *coder, t_dongle *first, t_dongle *second);
 int			monitoring_manager(t_arguments *arguments, t_coder **coders);
 int			init_allocation(t_arguments *arguments, t_coder **coders);
 

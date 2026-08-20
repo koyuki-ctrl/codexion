@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:21:34 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/18 14:42:40 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/20 15:51:22 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ static void	routing(t_arguments *args)
 			pthread_mutex_unlock(&args->state_lock);
 			log_state(args, args->coder_list[idx].id, "burned out");
 			request_stop(args);
-			pthread_mutex_lock(&args->state_lock);
 			break ;
 		}
 	}
@@ -81,6 +80,5 @@ void	*monitor_routine(void *arg)
 
 	args = (t_arguments *)arg;
 	routing(args);
-	pthread_mutex_unlock(&args->state_lock);
 	return (NULL);
 }

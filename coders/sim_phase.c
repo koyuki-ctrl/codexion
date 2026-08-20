@@ -6,23 +6,21 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:46:47 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/20 13:19:18 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/20 16:36:00 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "coders.h"
 
-int	acquire_dongles(t_coder *coder, t_dongle *first, t_dongle *second)
+int	lock_compilation_resources(
+	t_coder *coder, t_dongle *first, t_dongle *second)
 {
 	if (!dongle_acquire(first, coder->args, coder))
 		return (0);
 	if (first != second)
 	{
-		if (!take_dongle(coder, first, second))
-		{
-			dongle_release(first);
+		if (!finalize_second_dongle(coder, first, second))
 			return (0);
-		}
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:20:55 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/20 13:32:55 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/20 16:35:45 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	mark_compile_start(t_coder *c)
 	pthread_mutex_unlock(&c->args->state_lock);
 }
 
-int	take_dongle(t_coder *coder, t_dongle *first, t_dongle *second)
+int finalize_second_dongle(t_coder *coder, t_dongle *first, t_dongle *second)
 {
 	log_state(coder->args, coder->id, "has taken a dongle");
 	if (!dongle_acquire(second, coder->args, coder))
@@ -48,7 +48,7 @@ void	loop_sim(t_coder *coder, t_dongle *first, t_dongle *second)
 	i = 0;
 	while (i < coder->args->compiles && !is_stopped(coder->args))
 	{
-		if (!acquire_dongles(coder, first, second))
+		if (!lock_compilation_resources(coder, first, second))
 			break ;
 		if (!compile_phase(coder))
 			break ;
