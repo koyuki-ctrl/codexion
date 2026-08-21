@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:21:05 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/20 16:35:54 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/21 11:03:52 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,8 @@ int			compile_phase(t_coder *coder);
 int			debug_phase(t_coder *coder);
 void		refactor_phase(t_coder *coder);
 void		mark_compile_start(t_coder *c);
-int			finalize_second_dongle(t_coder *coder, t_dongle *first, t_dongle *second);
+int			finalize_second_dongle(
+				t_coder *coder, t_dongle *first, t_dongle *second);
 int			monitoring_manager(t_arguments *arguments, t_coder **coders);
 int			init_allocation(t_arguments *arguments, t_coder **coders);
 

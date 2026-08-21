@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:20:55 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/20 16:35:45 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/08/21 11:03:33 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	mark_compile_start(t_coder *c)
 	pthread_mutex_unlock(&c->args->state_lock);
 }
 
-int finalize_second_dongle(t_coder *coder, t_dongle *first, t_dongle *second)
+int	finalize_second_dongle(t_coder *coder, t_dongle *first, t_dongle *second)
 {
 	log_state(coder->args, coder->id, "has taken a dongle");
 	if (!dongle_acquire(second, coder->args, coder))
