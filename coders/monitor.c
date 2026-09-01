@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:21:34 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/25 10:17:18 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/09/01 10:13:05 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,48 +51,47 @@ static int	find_earliest(t_arguments *args, struct timespec *out, int *idx)
 	return (found);
 }
 
-static void	routing(t_arguments *args)
+static int	routing_step(t_arguments *args, struct timespec *deadline, int idx)
 {
-	struct timespec	deadline;
-	int				idx;
-	int				rc;
+	int	rc;
 
-	while (!is_stopped(args))
+	rc = pthread_cond_timedwait(&args->state_cond, &args->state_lock, deadline);
+	if (is_stopped(args))
+		return (0);
+	pthread_mutex_lock(&args->count_lock);
+	if (args->coder_list[idx].compiles_done >= args->compiles)
 	{
-		if (!find_earliest(args, &deadline, &idx))
-			break ;
-		rc = pthread_cond_timedwait(&args->state_cond, &args->state_lock,
-				&deadline);
-		if (is_stopped(args))
-			break ;
-		pthread_mutex_lock(&args->count_lock);
-		if (args->coder_list[idx].compiles_done >= args->compiles)
-		{
-			pthread_mutex_unlock(&args->count_lock);
-			continue ;
-		}
 		pthread_mutex_unlock(&args->count_lock);
-		if (
-			rc == ETIMEDOUT
-			&& ms_since(&args->coder_list[idx].last_compile_start)
-			> args->burnout)
-		{
-			pthread_mutex_unlock(&args->state_lock);
-			log_state(args, args->coder_list[idx].id, "burned out");
-			request_stop(args);
-			pthread_mutex_lock(&args->state_lock);
-			break ;
-		}
+		return (1);
 	}
+	pthread_mutex_unlock(&args->count_lock);
+	if (rc == ETIMEDOUT
+		&& ms_since(&args->coder_list[idx].last_compile_start) >= args->burnout)
+	{
+		pthread_mutex_unlock(&args->state_lock);
+		log_state(args, args->coder_list[idx].id, "burned out");
+		request_stop(args);
+		pthread_mutex_lock(&args->state_lock);
+		return (0);
+	}
+	return (1);
 }
 
 void	*monitor_routine(void *arg)
 {
 	t_arguments		*args;
+	struct timespec	deadline;
+	int				idx;
 
 	args = (t_arguments *)arg;
 	pthread_mutex_lock(&args->state_lock);
-	routing(args);
+	while (!is_stopped(args))
+	{
+		if (!find_earliest(args, &deadline, &idx))
+			break ;
+		if (!routing_step(args, &deadline, idx))
+			break ;
+	}
 	pthread_mutex_unlock(&args->state_lock);
 	return (NULL);
 }
