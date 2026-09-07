@@ -69,8 +69,7 @@ static int	routing_step(t_arguments *args, struct timespec *deadline, int idx)
 		&& ms_since(&args->coder_list[idx].last_compile_start) > args->burnout)
 	{
 		pthread_mutex_unlock(&args->state_lock);
-		log_state(args, args->coder_list[idx].id, "burned out");
-		request_stop(args);
+		stop_with_log(args, args->coder_list[idx].id, "burned out");
 		pthread_mutex_lock(&args->state_lock);
 		return (0);
 	}

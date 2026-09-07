@@ -53,9 +53,12 @@ void	log_state(t_arguments *args, int coder_id, const char *msg)
 {
 	long	ts;
 
-	ts = ms_since(&args->start_time);
 	pthread_mutex_lock(&args->print_lock);
-	printf("%ld %d %s\n", ts, coder_id, msg);
+	if (!args->stop)
+	{
+		ts = ms_since(&args->start_time);
+		printf("%ld %d %s\n", ts, coder_id, msg);
+	}
 	pthread_mutex_unlock(&args->print_lock);
 }
 

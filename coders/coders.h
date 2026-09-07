@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   coders.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
+/*   By: ainradan <ainradan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:21:05 by ainradan          #+#    #+#             */
-/*   Updated: 2026/09/04 15:06:23 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/09/07 16:49:29 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,6 @@ int			finalize_second_dongle(
 				t_coder *coder, t_dongle *first, t_dongle *second);
 int			monitoring_manager(t_arguments *arguments, t_coder **coders);
 int			init_allocation(t_arguments *arguments, t_coder **coders);
+void		stop_with_log(t_arguments *args, int coder_id, const char *msg);
 
 #endif

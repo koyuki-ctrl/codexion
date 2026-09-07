@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   coder.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
+/*   By: ainradan <ainradan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:20:55 by ainradan          #+#    #+#             */
-/*   Updated: 2026/09/07 11:23:30 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/09/07 17:01:07 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int	finalize_second_dongle(t_coder *coder, t_dongle *first, t_dongle *second)
 	return (1);
 }
 
-void	loop_sim(t_coder *coder, t_dongle *first, t_dongle *second)
+void	loop_sim(
+	t_coder *coder, t_dongle *first, t_dongle *second)
 {
 	int	i;
 
