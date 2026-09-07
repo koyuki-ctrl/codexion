@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:20:55 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/21 11:03:33 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/09/07 11:23:30 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,10 @@ void	loop_sim(t_coder *coder, t_dongle *first, t_dongle *second)
 			break ;
 		if (!debug_phase(coder))
 			break ;
-		refactor_phase(coder);
 		register_compile(coder->args, coder, coder->args->coder_list);
 		i++;
+		if (!refactor_phase(coder))
+			break ;
 	}
 }
 

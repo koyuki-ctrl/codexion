@@ -1,7 +1,7 @@
 NAME = codexion
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -pthread
+CFLAGS = -Wall -Wextra -Werror -pthread -std=c89
 
 SRCS = main.c coder.c dongles.c monitor.c parser.c\
 	   queue.c state.c utils.c thread.c dongles_utils.c\

@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:46:47 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/27 11:38:03 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/09/07 09:37:54 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ void	release_dongles(t_coder *coder)
 
 int	compile_phase(t_coder *coder)
 {
-	mark_compile_start(coder);
 	log_state(coder->args, coder->id, "is compiling");
+	mark_compile_start(coder);
 	usleep(coder->args->compile * 1000);
 	release_dongles(coder);
 	return (!is_stopped(coder->args));
@@ -54,8 +54,9 @@ int	debug_phase(t_coder *coder)
 	return (!is_stopped(coder->args));
 }
 
-void	refactor_phase(t_coder *coder)
+int	refactor_phase(t_coder *coder)
 {
 	log_state(coder->args, coder->id, "is refactoring");
 	usleep(coder->args->refactor * 1000);
+	return (!is_stopped(coder->args));
 }

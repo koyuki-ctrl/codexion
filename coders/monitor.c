@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:21:34 by ainradan          #+#    #+#             */
-/*   Updated: 2026/09/01 10:13:05 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/09/04 15:34:47 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	routing_step(t_arguments *args, struct timespec *deadline, int idx)
 	}
 	pthread_mutex_unlock(&args->count_lock);
 	if (rc == ETIMEDOUT
-		&& ms_since(&args->coder_list[idx].last_compile_start) >= args->burnout)
+		&& ms_since(&args->coder_list[idx].last_compile_start) > args->burnout)
 	{
 		pthread_mutex_unlock(&args->state_lock);
 		log_state(args, args->coder_list[idx].id, "burned out");

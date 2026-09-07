@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:21:05 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/24 16:12:38 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/09/04 15:06:23 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int			lock_compilation_resources(
 void		release_dongles(t_coder *coder);
 int			compile_phase(t_coder *coder);
 int			debug_phase(t_coder *coder);
-void		refactor_phase(t_coder *coder);
+int			refactor_phase(t_coder *coder);
 void		mark_compile_start(t_coder *c);
 int			finalize_second_dongle(
 				t_coder *coder, t_dongle *first, t_dongle *second);
