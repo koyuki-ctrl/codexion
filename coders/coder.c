@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:20:55 by ainradan          #+#    #+#             */
-/*   Updated: 2026/09/07 17:01:07 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/09/08 09:06:40 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ void	loop_sim(
 			break ;
 		if (!debug_phase(coder))
 			break ;
-		register_compile(coder->args, coder, coder->args->coder_list);
-		i++;
 		if (!refactor_phase(coder))
 			break ;
+		register_compile(coder->args, coder, coder->args->coder_list);
+		i++;
 	}
 }
 
