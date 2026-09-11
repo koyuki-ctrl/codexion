@@ -6,7 +6,7 @@
 /*   By: ainradan <ainradan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:21:05 by ainradan          #+#    #+#             */
-/*   Updated: 2026/09/08 08:35:09 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/09/11 13:45:39 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,15 @@ typedef struct s_coder
 	t_dongle			*left;
 	t_arguments			*args;
 	int					compiles_done;
+	int					finished;
 	struct timeval		last_compile_start;
 }	t_coder;
 
 t_request	*heap_extract_min(t_dongle *dongle);
 t_request	*heap_peek(t_dongle *dongle);
 
+int			check_completion(
+				t_arguments *args, t_coder *coder, t_coder *coders);
 int			arguments_validator(char **argv, t_arguments *arguments);
 void		log_state(t_arguments *args, int coder_id, const char *msg);
 int			ft_strict_atoi(const char *s, long *out);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ainradan <ainradan@student.42antananari    +#+  +:+       +#+        */
+/*   By: ainradan <ainradan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/12 09:20:38 by ainradan          #+#    #+#             */
-/*   Updated: 2026/08/25 09:17:40 by ainradan         ###   ########.fr       */
+/*   Updated: 2026/09/11 13:46:57 by ainradan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static void	coders_init(t_coder *coders, t_arguments *arguments)
 		coders[i].left = &arguments->dongles[i];
 		coders[i].right = &arguments->dongles[(i + 1) % arguments->coders];
 		coders[i].compiles_done = 0;
+		coders[i].finished = 0;
 		coders[i].last_compile_start = arguments->start_time;
 		i++;
 	}
